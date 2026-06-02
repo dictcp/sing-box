@@ -112,6 +112,7 @@ func NewRuleAction(ctx context.Context, logger logger.ContextLogger, action opti
 			DisableCache: action.ResolveOptions.DisableCache,
 			RewriteTTL:   action.ResolveOptions.RewriteTTL,
 			ClientSubnet: action.ResolveOptions.ClientSubnet.Build(netip.Prefix{}),
+			RouteOnly:    action.ResolveOptions.RouteOnly,
 		}, nil
 	default:
 		panic(F.ToString("unknown rule action: ", action.Action))
@@ -476,6 +477,7 @@ type RuleActionResolve struct {
 	DisableCache bool
 	RewriteTTL   *uint32
 	ClientSubnet netip.Prefix
+	RouteOnly    bool
 }
 
 func (r *RuleActionResolve) Type() string {
@@ -498,6 +500,9 @@ func (r *RuleActionResolve) String() string {
 	}
 	if r.ClientSubnet.IsValid() {
 		options = append(options, F.ToString("client_subnet=", r.ClientSubnet))
+	}
+	if r.RouteOnly {
+		options = append(options, "route_only")
 	}
 	if len(options) == 0 {
 		return "resolve"

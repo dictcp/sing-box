@@ -93,6 +93,9 @@ func (m *ConnectionManager) TrackPacketConn(conn net.PacketConn) net.PacketConn 
 
 func (m *ConnectionManager) NewConnection(ctx context.Context, this N.Dialer, conn net.Conn, metadata adapter.InboundContext, onClose N.CloseHandlerFunc) {
 	ctx = adapter.WithContext(ctx, &metadata)
+	if metadata.RouteOnlyDestinationAddresses {
+		metadata.DestinationAddresses = nil
+	}
 	var (
 		remoteConn net.Conn
 		err        error
@@ -143,6 +146,9 @@ func (m *ConnectionManager) NewConnection(ctx context.Context, this N.Dialer, co
 
 func (m *ConnectionManager) NewPacketConnection(ctx context.Context, this N.Dialer, conn N.PacketConn, metadata adapter.InboundContext, onClose N.CloseHandlerFunc) {
 	ctx = adapter.WithContext(ctx, &metadata)
+	if metadata.RouteOnlyDestinationAddresses {
+		metadata.DestinationAddresses = nil
+	}
 	var (
 		remotePacketConn   net.PacketConn
 		remoteConn         net.Conn

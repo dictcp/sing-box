@@ -78,12 +78,13 @@ type InboundContext struct {
 	FallbackNetworkType []C.InterfaceType
 	FallbackDelay       time.Duration
 
-	DestinationAddresses []netip.Addr
-	SourceGeoIPCode      string
-	GeoIPCode            string
-	ProcessInfo          *ConnectionOwner
-	QueryType            uint16
-	FakeIP               bool
+	DestinationAddresses          []netip.Addr
+	RouteOnlyDestinationAddresses bool
+	SourceGeoIPCode               string
+	GeoIPCode                     string
+	ProcessInfo                   *ConnectionOwner
+	QueryType                     uint16
+	FakeIP                        bool
 
 	// rule cache
 
