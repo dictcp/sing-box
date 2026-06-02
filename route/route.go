@@ -150,6 +150,8 @@ func (r *Router) routeConnection(ctx context.Context, conn net.Conn, metadata ad
 		selectedOutbound = defaultOutbound
 	}
 
+	metadata.ClearRouteOnlyDestinationAddresses()
+
 	for _, buffer := range buffers {
 		conn = bufio.NewCachedConn(conn, buffer)
 	}
@@ -277,6 +279,8 @@ func (r *Router) routePacketConnection(ctx context.Context, conn N.PacketConn, m
 		}
 		selectedOutbound = defaultOutbound
 	}
+	metadata.ClearRouteOnlyDestinationAddresses()
+
 	for _, buffer := range packetBuffers {
 		conn = bufio.NewCachedPacketConn(conn, buffer.Buffer, buffer.Destination)
 		N.PutPacketBuffer(buffer)
@@ -354,6 +358,7 @@ func (r *Router) PreMatch(metadata adapter.InboundContext, routeContext tun.Dire
 		}
 		directRouteOutbound = defaultOutbound.(adapter.DirectRouteOutbound)
 	}
+	metadata.ClearRouteOnlyDestinationAddresses()
 	if metadata.Destination.IsDomain() {
 		if len(metadata.DestinationAddresses) == 0 {
 			var strategy C.DomainStrategy
@@ -506,6 +511,7 @@ match:
 					Fqdn: routeOptions.OverrideAddress.Fqdn,
 				}
 				metadata.DestinationAddresses = nil
+				metadata.DestinationAddressesRouteOnly = false
 			}
 			if routeOptions.OverridePort > 0 {
 				metadata.Destination = M.Socksaddr{
@@ -812,6 +818,7 @@ func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundCon
 			return err
 		}
 		metadata.DestinationAddresses = addresses
+		metadata.DestinationAddressesRouteOnly = action.RouteOnly
 		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
 	}
 	return nil
