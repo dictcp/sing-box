@@ -85,6 +85,7 @@ type InboundContext struct {
 	FallbackDelay       time.Duration
 
 	DestinationAddresses                []netip.Addr
+	DestinationAddressesRouteOnly       bool
 	DNSResponse                         *dns.Msg
 	DestinationAddressMatchFromResponse bool
 	SourceGeoIPCode                     string
@@ -106,6 +107,13 @@ type InboundContext struct {
 	DestinationPortMatch         bool
 	DidMatch                     bool
 	IgnoreDestinationIPCIDRMatch bool
+}
+
+func (c *InboundContext) ClearRouteOnlyDestinationAddresses() {
+	if c.DestinationAddressesRouteOnly {
+		c.DestinationAddresses = nil
+		c.DestinationAddressesRouteOnly = false
+	}
 }
 
 func (c *InboundContext) ResetRuleCache() {
