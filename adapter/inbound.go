@@ -94,6 +94,7 @@ type InboundContext struct {
 	SourceHostname                      string
 	QueryType                           uint16
 	FakeIP                              bool
+	RouteOnly                           bool
 
 	// rule cache
 

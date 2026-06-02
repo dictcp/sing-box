@@ -334,6 +334,7 @@ type RouteActionResolve struct {
 	DisableOptimisticCache bool                  `json:"disable_optimistic_cache,omitempty"`
 	RewriteTTL             *uint32               `json:"rewrite_ttl,omitempty"`
 	ClientSubnet           *badoption.Prefixable `json:"client_subnet,omitempty"`
+	RouteOnly              bool                  `json:"route_only,omitempty"`
 }
 
 type DNSRouteActionPredefined struct {

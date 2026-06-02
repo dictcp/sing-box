@@ -10,6 +10,7 @@ icon: material/new-box
 !!! quote "sing-box 1.14.0 中的更改"
 
     :material-plus: [resolve.disable_optimistic_cache](#disable_optimistic_cache)  
+    :material-plus: [resolve.route_only](#route_only)  
     :material-plus: [resolve.timeout](#timeout)  
     :material-plus: [tls_spoof](#tls_spoof)  
     :material-plus: [tls_spoof_method](#tls_spoof_method)
@@ -301,7 +302,8 @@ UDP 连接超时时间。
   "disable_optimistic_cache": false,
   "rewrite_ttl": null,
   "timeout": "",
-  "client_subnet": null
+  "client_subnet": null,
+  "route_only": false
 }
 ```
 
@@ -352,3 +354,13 @@ DNS 解析策略，可用值有：`prefer_ipv4`、`prefer_ipv6`、`ipv4_only`、
 如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。
 
 将覆盖 `dns.client_subnet`.
+
+#### route_only
+
+!!! question "自 sing-box 1.14.0 起"
+
+如果启用，解析出的 IP 地址仅用于匹配后续的路由规则，
+而连接仍然使用原始域名发送到服务器。
+
+当您希望在客户端根据解析出的 IP 进行路由（例如 `geoip` 规则），
+但仍希望代理服务器自行解析域名以便根据域名做出进一步的路由决策时，此选项非常有用。

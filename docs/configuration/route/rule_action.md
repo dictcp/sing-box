@@ -10,6 +10,7 @@ icon: material/new-box
 !!! quote "Changes in sing-box 1.14.0"
 
     :material-plus: [resolve.disable_optimistic_cache](#disable_optimistic_cache)  
+    :material-plus: [resolve.route_only](#route_only)  
     :material-plus: [resolve.timeout](#timeout)  
     :material-plus: [tls_spoof](#tls_spoof)  
     :material-plus: [tls_spoof_method](#tls_spoof_method)
@@ -311,7 +312,8 @@ Timeout for sniffing.
   "disable_optimistic_cache": false,
   "rewrite_ttl": null,
   "timeout": "",
-  "client_subnet": null
+  "client_subnet": null,
+  "route_only": false
 }
 ```
 
@@ -362,3 +364,14 @@ Append a `edns0-subnet` OPT extra record with the specified IP prefix to every q
 If value is an IP address instead of prefix, `/32` or `/128` will be appended automatically.
 
 Will override `dns.client_subnet`.
+
+#### route_only
+
+!!! question "Since sing-box 1.14.0"
+
+If enabled, the resolved IP addresses are only used for matching subsequent routing rules,
+while the connection is still sent to the server using the original domain name.
+
+This is useful when you want to route based on resolved IPs on the client side
+(e.g. `geoip` rules) but still want the proxy server to resolve the domain itself,
+so that the proxy server can make further routing decisions based on the domain.
