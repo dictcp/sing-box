@@ -153,6 +153,9 @@ func (r *Router) routeConnection(ctx context.Context, conn net.Conn, metadata ad
 	for _, buffer := range buffers {
 		conn = bufio.NewCachedConn(conn, buffer)
 	}
+	if metadata.DestinationAddressesRouteOnly && selectedOutbound.Type() != C.TypeDirect {
+		metadata.DestinationAddresses = nil
+	}
 	for _, tracker := range r.trackers {
 		conn = tracker.RoutedConnection(ctx, conn, metadata, selectedRule, selectedOutbound)
 	}
@@ -280,6 +283,9 @@ func (r *Router) routePacketConnection(ctx context.Context, conn N.PacketConn, m
 	for _, buffer := range packetBuffers {
 		conn = bufio.NewCachedPacketConn(conn, buffer.Buffer, buffer.Destination)
 		N.PutPacketBuffer(buffer)
+	}
+	if metadata.DestinationAddressesRouteOnly && selectedOutbound.Type() != C.TypeDirect {
+		metadata.DestinationAddresses = nil
 	}
 	for _, tracker := range r.trackers {
 		conn = tracker.RoutedPacketConnection(ctx, conn, metadata, selectedRule, selectedOutbound)
@@ -790,6 +796,7 @@ func (r *Router) actionSniff(
 }
 
 func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundContext, action *R.RuleActionResolve) error {
+	metadata.DestinationAddressesRouteOnly = false
 	if metadata.Destination.IsDomain() {
 		var transport adapter.DNSTransport
 		if action.Server != "" {
@@ -812,6 +819,7 @@ func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundCon
 			return err
 		}
 		metadata.DestinationAddresses = addresses
+		metadata.DestinationAddressesRouteOnly = action.RouteOnly
 		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
 	}
 	return nil

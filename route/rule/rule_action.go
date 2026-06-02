@@ -113,6 +113,7 @@ func NewRuleAction(ctx context.Context, logger logger.ContextLogger, action opti
 			Server:                 action.ResolveOptions.Server,
 			Timeout:                time.Duration(action.ResolveOptions.Timeout),
 			Strategy:               C.DomainStrategy(action.ResolveOptions.Strategy),
+			RouteOnly:              action.ResolveOptions.RouteOnly,
 			DisableCache:           action.ResolveOptions.DisableCache,
 			DisableOptimisticCache: action.ResolveOptions.DisableOptimisticCache,
 			RewriteTTL:             action.ResolveOptions.RewriteTTL,
@@ -544,6 +545,7 @@ type RuleActionResolve struct {
 	Server                 string
 	Timeout                time.Duration
 	Strategy               C.DomainStrategy
+	RouteOnly              bool
 	DisableCache           bool
 	DisableOptimisticCache bool
 	RewriteTTL             *uint32
@@ -561,6 +563,9 @@ func (r *RuleActionResolve) String() string {
 	}
 	if r.Strategy != C.DomainStrategyAsIS {
 		options = append(options, F.ToString(option.DomainStrategy(r.Strategy)))
+	}
+	if r.RouteOnly {
+		options = append(options, "route_only")
 	}
 	if r.DisableCache {
 		options = append(options, "disable_cache")

@@ -85,6 +85,7 @@ type InboundContext struct {
 	FallbackDelay       time.Duration
 
 	DestinationAddresses                []netip.Addr
+	DestinationAddressesRouteOnly       bool
 	DNSResponse                         *dns.Msg
 	DestinationAddressMatchFromResponse bool
 	SourceGeoIPCode                     string
