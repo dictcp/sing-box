@@ -11,6 +11,7 @@ icon: material/new-box
 
     :material-plus: [resolve.disable_optimistic_cache](#disable_optimistic_cache)  
     :material-plus: [resolve.timeout](#timeout)  
+    :material-plus: [resolve.route_only](#route_only)<br>
     :material-plus: [tls_spoof](#tls_spoof)  
     :material-plus: [tls_spoof_method](#tls_spoof_method)
 
@@ -307,6 +308,7 @@ Timeout for sniffing.
   "action": "resolve",
   "server": "",
   "strategy": "",
+  "route_only": false,
   "disable_cache": false,
   "disable_optimistic_cache": false,
   "rewrite_ttl": null,
@@ -326,6 +328,12 @@ Specifies DNS server tag to use instead of selecting through DNS routing.
 DNS resolution strategy, available values are: `prefer_ipv4`, `prefer_ipv6`, `ipv4_only`, `ipv6_only`.
 
 `dns.strategy` will be used by default.
+
+#### route_only
+
+!!! question "Since sing-box 1.14.0"
+
+Only use resolved IP addresses for route rule matching. The request destination remains the original domain name when dialing the outbound.
 
 #### disable_cache
 

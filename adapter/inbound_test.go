@@ -43,3 +43,26 @@ func TestDNSResponseAddressesUnmapsHTTPSIPv4Hints(t *testing.T) {
 	require.Equal(t, []netip.Addr{netip.MustParseAddr("1.1.1.1")}, addresses)
 	require.True(t, addresses[0].Is4())
 }
+
+func TestInboundContextClearRouteOnlyDestinationAddresses(t *testing.T) {
+	t.Parallel()
+
+	metadata := InboundContext{
+		DestinationAddresses:          []netip.Addr{netip.MustParseAddr("192.0.2.1")},
+		DestinationAddressesRouteOnly: true,
+	}
+	metadata.ClearRouteOnlyDestinationAddresses()
+
+	require.Empty(t, metadata.DestinationAddresses)
+	require.False(t, metadata.DestinationAddressesRouteOnly)
+}
+
+func TestInboundContextClearRouteOnlyDestinationAddressesKeepsDialAddresses(t *testing.T) {
+	t.Parallel()
+
+	addresses := []netip.Addr{netip.MustParseAddr("192.0.2.1")}
+	metadata := InboundContext{DestinationAddresses: addresses}
+	metadata.ClearRouteOnlyDestinationAddresses()
+
+	require.Equal(t, addresses, metadata.DestinationAddresses)
+}
