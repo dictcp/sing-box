@@ -811,7 +811,9 @@ func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundCon
 		if err != nil {
 			return err
 		}
-		metadata.DestinationAddresses = addresses
+		if !action.RouteOnly {
+			metadata.DestinationAddresses = addresses
+		}
 		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
 	}
 	return nil
