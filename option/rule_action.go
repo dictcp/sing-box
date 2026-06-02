@@ -328,6 +328,7 @@ type RouteActionSniff struct {
 
 type RouteActionResolve struct {
 	Server                 string                `json:"server,omitempty"`
+	RouteOnly              bool                  `json:"route_only,omitempty"`
 	Timeout                badoption.Duration    `json:"timeout,omitempty"`
 	Strategy               DomainStrategy        `json:"strategy,omitempty"`
 	DisableCache           bool                  `json:"disable_cache,omitempty"`

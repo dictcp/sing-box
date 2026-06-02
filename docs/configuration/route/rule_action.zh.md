@@ -11,6 +11,7 @@ icon: material/new-box
 
     :material-plus: [resolve.disable_optimistic_cache](#disable_optimistic_cache)  
     :material-plus: [resolve.timeout](#timeout)  
+    :material-plus: [resolve.route_only](#route_only)<br>
     :material-plus: [tls_spoof](#tls_spoof)  
     :material-plus: [tls_spoof_method](#tls_spoof_method)
 
@@ -297,6 +298,7 @@ UDP 连接超时时间。
   "action": "resolve",
   "server": "",
   "strategy": "",
+  "route_only": false,
   "disable_cache": false,
   "disable_optimistic_cache": false,
   "rewrite_ttl": null,
@@ -316,6 +318,12 @@ UDP 连接超时时间。
 DNS 解析策略，可用值有：`prefer_ipv4`、`prefer_ipv6`、`ipv4_only`、`ipv6_only`。
 
 默认使用 `dns.strategy`。
+
+#### route_only
+
+!!! question "自 sing-box 1.14.0 起"
+
+仅将解析得到的 IP 地址用于路由规则匹配。连接出站时，请求目标仍保留为原始域名。
 
 #### disable_cache
 
