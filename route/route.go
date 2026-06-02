@@ -812,6 +812,9 @@ func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundCon
 			return err
 		}
 		metadata.DestinationAddresses = addresses
+		if !action.RouteOnly {
+			metadata.Destination = M.SocksaddrFrom(addresses[0], metadata.Destination.Port)
+		}
 		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
 	}
 	return nil
