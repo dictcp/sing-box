@@ -6,6 +6,7 @@ icon: material/new-box
 
     :material-plus: [bypass](#bypass)  
     :material-alert: [reject](#reject)
+    :material-plus: [resolve.route_only](#route_only)
 
 !!! quote "sing-box 1.12.0 中的更改"
 
@@ -269,7 +270,8 @@ UDP 连接超时时间。
   "strategy": "",
   "disable_cache": false,
   "rewrite_ttl": null,
-  "client_subnet": null
+  "client_subnet": null,
+  "route_only": false
 }
 ```
 
@@ -306,3 +308,17 @@ DNS 解析策略，可用值有：`prefer_ipv4`、`prefer_ipv6`、`ipv4_only`、
 如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。
 
 将覆盖 `dns.client_subnet`.
+
+#### route_only
+
+!!! question "自 sing-box 1.13.0 起"
+
+如果启用，解析的 IP 地址将仅用于匹配基于 IP 的路由规则
+（如 `ip_cidr`、`geoip`、`ip_accept_any`、`ip_is_private`、`preferred_by`），
+通过出站连接时仍保留原始域名目标。
+
+这在需要在客户端进行基于 IP 的规则匹配、但希望由服务器端解析并连接目标域名时非常有用，
+可以避免重复进行 DNS 解析，并避免客户端 DNS 污染导致的问题。
+
+默认情况下，解析的 IP 地址也会用于连接到目标
+（通过代理或直接连接），代理服务器在连接中看到的将是 IP 地址而不是原始域名。

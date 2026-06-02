@@ -83,6 +83,9 @@ func (r *IPCIDRItem) Match(metadata *adapter.InboundContext) bool {
 	if len(metadata.DestinationAddresses) > 0 {
 		return slices.ContainsFunc(metadata.DestinationAddresses, r.ipSet.Contains)
 	}
+	if len(metadata.RouteDestinationAddresses) > 0 {
+		return slices.ContainsFunc(metadata.RouteDestinationAddresses, r.ipSet.Contains)
+	}
 	return metadata.IPCIDRAcceptEmpty
 }
 

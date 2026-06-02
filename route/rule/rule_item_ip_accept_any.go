@@ -13,7 +13,7 @@ func NewIPAcceptAnyItem() *IPAcceptAnyItem {
 }
 
 func (r *IPAcceptAnyItem) Match(metadata *adapter.InboundContext) bool {
-	return len(metadata.DestinationAddresses) > 0
+	return len(metadata.DestinationAddresses) > 0 || len(metadata.RouteDestinationAddresses) > 0
 }
 
 func (r *IPAcceptAnyItem) String() string {

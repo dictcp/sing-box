@@ -778,8 +778,12 @@ func (r *Router) actionResolve(ctx context.Context, metadata *adapter.InboundCon
 		if err != nil {
 			return err
 		}
-		metadata.DestinationAddresses = addresses
-		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(metadata.DestinationAddresses), " "), "]")
+		if action.RouteOnly {
+			metadata.RouteDestinationAddresses = addresses
+		} else {
+			metadata.DestinationAddresses = addresses
+		}
+		r.logger.DebugContext(ctx, "resolved [", strings.Join(F.MapToString(addresses), " "), "]")
 	}
 	return nil
 }

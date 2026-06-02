@@ -6,6 +6,7 @@ icon: material/new-box
 
     :material-plus: [bypass](#bypass)  
     :material-alert: [reject](#reject)
+    :material-plus: [resolve.route_only](#route_only)
 
 !!! quote "Changes in sing-box 1.12.0"
 
@@ -280,7 +281,8 @@ Timeout for sniffing.
   "strategy": "",
   "disable_cache": false,
   "rewrite_ttl": null,
-  "client_subnet": null
+  "client_subnet": null,
+  "route_only": false
 }
 ```
 
@@ -317,3 +319,19 @@ Append a `edns0-subnet` OPT extra record with the specified IP prefix to every q
 If value is an IP address instead of prefix, `/32` or `/128` will be appended automatically.
 
 Will overrides `dns.client_subnet`.
+
+#### route_only
+
+!!! question "Since sing-box 1.13.0"
+
+If enabled, the resolved IP addresses are only used for matching IP-based routing rules
+(such as `ip_cidr`, `geoip`, `ip_accept_any`, `ip_is_private`, `preferred_by`),
+and the original domain destination is preserved when connecting through the outbound.
+
+This is useful when you want to do IP-based rule matching on the client side,
+but still let the server side resolve and connect to the destination domain,
+avoiding duplicate DNS resolution and avoiding issues caused by DNS pollution on the client.
+
+By default, the resolved IP addresses are also used to connect to the destination
+(via the proxy or directly), and the proxy server will see the IP address in the connection
+instead of the original domain.

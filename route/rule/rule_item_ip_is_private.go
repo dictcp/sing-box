@@ -33,6 +33,11 @@ func (r *IPIsPrivateItem) Match(metadata *adapter.InboundContext) bool {
 				return true
 			}
 		}
+		for _, destinationAddress := range metadata.RouteDestinationAddresses {
+			if !N.IsPublicAddr(destinationAddress) {
+				return true
+			}
+		}
 	}
 	return false
 }
